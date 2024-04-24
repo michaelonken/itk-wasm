@@ -94,8 +94,10 @@
 #include "dcmtk/dcmdata/cmdlnarg.h"
 #include "dcmtk/ofstd/ofcmdln.h"
 #include "dcmtk/ofstd/ofconapp.h"
-#include "dcmtk/ofstd/ofvector.h"
 #include "dcmtk/dcmdata/dcuid.h"      /* for dcmtk version name */
+
+#include "dcmtk/ofstd/ofvector.h"
+#include "dcmtk/dcmiod/modimagepixel.h" /* for IODImagePixelModule, needed for ICCProfile reading */
 
 #include "cpp-base64/base64.h"
 #include "rapidjson/document.h"
@@ -167,7 +169,10 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
   }
 
   // ICC color Profile
-  const OFVector<Uint8> iccProfile = ps.getICCProfile();
+  IODImagePixelModule<Uint16> iodImagePixelModule;
+  iodImagePixelModule.read(dset);
+  OFVector<Uint8> iccProfile;
+  iodImagePixelModule.getICCProfile(iccProfile);
   if (!iccProfile.empty())
   {
     // Encode the binary color profile data as a base64 string
