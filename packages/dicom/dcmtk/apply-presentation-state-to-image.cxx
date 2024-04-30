@@ -178,7 +178,6 @@ static void dumpPresentationState(STD_NAMESPACE ostream &out, DVPresentationStat
     if (cond.good() && iccProfileSize > 0)
     {
       // Encode the binary color profile data as a base64 string
-      std::string iccProfileAsString(reinterpret_cast<const char*>(iccProfile), iccProfileSize);
       doc.AddMember("ICCProfile", Value(base64_encode(iccProfile, iccProfileSize, false).c_str(), alloc), alloc);
     }
   }
